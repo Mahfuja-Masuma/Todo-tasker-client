@@ -1,0 +1,12 @@
+form input{
+    @apply w-full p-2 my-2 rounded-md border border-primary outline-none
+}
+form button{
+    @apply w-full p-2 my-2 outline-none rounded-md border bg-primary 
+}
+.btn1{
+    @apply w-full p-2 my-2 rounded-md border bg-primary text-white border-none
+}
+.btn2{
+    @apply w-full p-2 my-2 rounded-md border bg-quaternary text-white border-none
+}
