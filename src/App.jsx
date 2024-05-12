@@ -26,9 +26,6 @@ if(getAuthToken()){
 <BrowserRouter>
 <Routes>
 
-
-
-
   <Route path="/" element={<HomePage/>} />
   {/* todo routes */}
   <Route path="/create-todo" element={<CreateTodoPage/>} />

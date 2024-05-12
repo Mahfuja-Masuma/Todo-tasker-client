@@ -3,6 +3,8 @@ import { toast } from 'react-toastify';
 import { getAuthToken, logout, setAuthToken, setEmail, setOTP, setUserDetails } from "../helper/SesionHelper";
 import { store } from "../redux/store/Store";
 import { setProfile } from "../redux/slices/ProfileSlice";
+import { createCancelTodo, createCompletedTodo, createNewTodo, createProgressTodo } from "../redux/slices/todoSlice";
+import { addAllTodos } from "../redux/slices/TodoSummarySlice";
 
 const baseUrl = "https://to-do-tasker-ip1o.onrender.com/api/v1"; //this is the base url this application
 const token = {headers:{token: getAuthToken()}} //set token in header
@@ -286,6 +288,135 @@ export function CreateTodoApi(title, description){
 }
 // create todo api end
 
-// Create todo api call end
+//todo list by stutas start
+
+export function TodoListByStatus(status){
+
+    let url = `${baseUrl}/todo-listBy-status/${status}`
+
+    return axios.get(url, token)
+    .then((response) => {
+        if(response.status === 200) {  
+            if(status == "New"){
+                store.dispatch(createNewTodo(response.data.data));
+            }
+           else if(status == "Progress"){
+                store.dispatch(createProgressTodo(response.data.data));
+            }
+           else if(status == "Completed"){
+                store.dispatch(createCompletedTodo(response.data.data));
+            }
+           else if(status == "Canceled"){
+                store.dispatch(createCancelTodo(response.data.data));
+            }
+           return true;
+        }
+        else{
+            toast.error('Something went wrong')
+            return false
+            
+        }
+    })
+    .catch((error) => {
+        if(error.response && error.response.status === 401){
+         toast.error('Something went wrong')
+         logout()
+        }
+        else{
+         toast.error('Something went wrong')
+         return false
+        }
+      })
+
+}
+//todo list by stutas end 
+
+// Delete Todo start 
+export function DeleteTodo(id){
+    let url = `${baseUrl}/todo-delete/${id}`
+    return axios.get(url, token)
+    .then((response) => {
+        if(response.status === 200) {
+            toast.success('Todo Deleted successfully')
+            return true
+        }
+        else{
+            toast.error('Something went wrong')
+            return false
+            
+        }
+    })
+    .catch((error) => {
+        if(error.response && error.response.status === 401){
+         toast.error('Something went wrong')
+         logout()
+        }
+        else{
+         toast.error('Something went wrong')
+         return false
+        }
+      })
+}
+// Delete Todo end
+
+// Update Todo start 
+export function UpdateTodo(id , status){
+    let url = `${baseUrl}/todo-update-status/${id}/${status}`
+    return axios.get(url, token)
+    .then((response) => {
+        if(response.status === 200) {
+            toast.success('Todo Updated successfully')
+            return true
+        }
+        else{
+            toast.error('Something went wrong')
+            return false
+            
+        }
+    })
+    .catch((error) => {
+        if(error.response && error.response.status === 401){
+         toast.error('Something went wrong')
+         logout()
+        }
+        else{
+         toast.error('Something went wrong')
+         return false
+        }
+      })
+}
+// Update Todo end
+
+
+// All Todos Start
+export function AllTodosApi(){
+     let url = `${baseUrl}/todo-count-by-status`
+     return axios.get(url, token)
+     .then((response) => {
+        if(response.status === 200){
+            store.dispatch(addAllTodos(response.data.data))
+            return true
+
+
+        }
+        else{
+            toast.error('Something went wrong')
+            return false
+            
+        }
+
+     })
+     .catch((error) => {
+        if(error.response && error.response.status === 401){
+         toast.error('Something went wrong')
+         logout()
+        }
+        else{
+         toast.error('Something went wrong')
+         return false
+        }
+      }) 
+}
+// All Todos End
 
 
